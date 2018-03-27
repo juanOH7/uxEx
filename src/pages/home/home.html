@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+   <ion-title color="red">
+    <ion-item class="item item-trns text-center">
+      <h1>Bienvenido!</h1>
+        <p>Envía mensajes a tus amigos</p>
+       <ion-avatar item-end *ngIf="afAuth.authState | async">
+           <img src={{currentUser.photoURL}}>
+       </ion-avatar>
+    </ion-item>
+      <button ion-button small color="primary" (click)="logout()" end>Logout</button>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div *ngIf="afAuth.authState | async as user; else showLogin">
+        <ion-card *ngFor="let mens of mensajes | async" >
+            <ion-item (click)="showOptions(mens.id, mens.mensaje, mens.uname)">
+                <h2>De: {{mens.uname}}</h2>
+                <p>Mensaje: {{mens.mensaje}}</p>
+            </ion-item>
+            <button ion-button icon-left clear small (click)="addlikes(mens.id,mens.likes)">
+                <ion-icon name="thumbs-up"></ion-icon>
+            </button>
+            <button ion-button icon-left clear small (click)="addDislikes(mens.id,mens.likes)">
+                <ion-icon name="thumbs-down"></ion-icon>
+                <p>{{mens.likes}}</p>
+            </button>
+        </ion-card>
+
+       <button ion-button small color="primary" (click)="addMessage()" >+</button>
+    </div>
+  <ng-template #showLogin>
+    <p>Please login.</p>
+    <button ion-button color="danger"  full (click)="login()" icon-right>
+      <ion-icon name="logo-googleplus"></ion-icon>
+      Login with Google
+    </button>
+  </ng-template>
+</ion-content>
